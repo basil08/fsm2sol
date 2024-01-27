@@ -34,7 +34,41 @@ def stateDef(inp, buffer):
     return buffer
 
 def transitionDef(inp, buffer):
-    
+    trs = inp['transitions']
+    buffer += "\n\t// Transition definitions "
+    for tr in trs:
+        buffer += add_transition(trs[tr])
+
+    return buffer
+
+def add_transition(tr):
+    """
+    Adds one transition to the buffer
+    """
+    # TODO: ensure len(tr['I']) == len(tr['type_I'])
+    print(tr)
+    variables = ', '.join(tr['type_I'][i] + " " + tr['access_I'][i] + " " + tr['I'][i] for i in range(len(tr['I'])))
+    returns = " returns ({})".format(', '.join([e for e in tr['returns']]))
+    guards = "require ({});".format("&&".join(tr['t_guards']))
+    stmts = ";\n\t".join(tr['t_stmts'])
+
+    buffer = "\n\t {0} {1} ({2}) {3} {4} {{\n \
+        {5}  \
+        {7} \
+        {8} \
+        {6} \
+        }}\n".format(
+            "function" if not tr['isConst'] else "",
+            tr['name'] ,
+            variables,
+            "payable" if tr['payable'] else "",
+            returns if len(tr['returns']) > 0 else "",
+            "requires(state == States.{});\n".format(tr['t_from']) if tr['t_from'] else "",
+            "state = States.{};\n".format(tr['t_to']) if tr['t_to'] else "",
+            guards if len(tr['t_guards']) > 0 else "",
+            stmts + ";" if len(tr['t_stmts']) > 0 else "",
+        )
+
     return buffer
 
 def transform2sol(inp):
