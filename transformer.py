@@ -15,12 +15,26 @@ def defaultClosing(inp, buffer):
     return buffer
 
 def variableDef(inp, buffer):
+    # add the custom data types namely T_custom
+    buffer += "\t// Variable definitions"
+    buffer += "\n\t{0}".format(';\n'.join([e for e in inp['T_custom']]))
+    variables = [inp['type_C'][i]
+        + " " + inp['access_C'][i]
+        + " " + inp['C'][i] for i in range(len(inp['type_C']))]
+    buffer += "\n\t{0}".format(';\n\t'.join(variables))
+    buffer += ";\n\n" 
     return buffer
 
 def stateDef(inp, buffer):
+
+    buffer += "\t// State definitions"
+    states = ', '.join(inp['S'])
+    buffer += "\n\tenum States {{ {0}  }};".format(states)
+    buffer += "\n\tStates private state = States.{0};\n".format(inp['S0'])
     return buffer
 
 def transitionDef(inp, buffer):
+    
     return buffer
 
 def transform2sol(inp):
@@ -37,22 +51,22 @@ def transform2sol(inp):
     return buffer
 
 def main():
-    # take a .fsm file
-    # parse it
-    # generate a .sol file
-
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument("input", help="path to input YAML file specifying FSM")
+    arg_parser.add_argument("input", nargs='+', help="path to input YAML file(s) specifying FSM(s)")
     args = arg_parser.parse_args()
 
-    if args.input:
-        with open(args.input, "r") as file:
-            input_fsm = yaml.safe_load(file)
-            output_sol = transform2sol(input_fsm)
-            with open('{}.sol'.format(input_fsm['name']), "w") as output:
-                output.write(output_sol)
-                print("[+] Written .sol file")
-
+    if len(args.input) > 0:
+        for input_file in args.input:
+            try:
+                with open(input_file, "r") as file:
+                    input_fsm = yaml.safe_load(file)
+                    output_sol = transform2sol(input_fsm)
+                    # TODO: what if input_fsm['name] is not defined?
+                    with open('{}.sol'.format(input_fsm['name']), "w") as output:
+                        output.write(output_sol)
+                        print("[+] Written {}.sol file".format(input_fsm['name']))
+            except FileNotFoundError as e:
+                print("Cannot find file: {} :/".format(e.filename))
 
 if __name__ == "__main__":
     main()
