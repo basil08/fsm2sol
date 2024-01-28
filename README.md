@@ -18,7 +18,7 @@ Why not start thinking of contracts as FSMs before writing a single line of code
 
 Enter `fsm2sol`
 
-INSERT DIAGRAM TO SHOW SCHEMATIC OF THE PROJECT
+![](/assets/img/2.png)
 
 ## Formal definition of the FSM
 

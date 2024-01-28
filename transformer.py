@@ -46,7 +46,6 @@ def add_transition(tr):
     Adds one transition to the buffer
     """
     # TODO: ensure len(tr['I']) == len(tr['type_I'])
-    print(tr)
     variables = ', '.join(tr['type_I'][i] + " " + tr['access_I'][i] + " " + tr['I'][i] for i in range(len(tr['I'])))
     returns = " returns ({})".format(', '.join([e for e in tr['returns']]))
     guards = "require ({});".format("&&".join(tr['t_guards']))
