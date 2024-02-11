@@ -1,5 +1,12 @@
 # fsm2sol - smart contracts as FSMs! 
 
+Slide link: [here](https://docs.google.com/presentation/d/1jvGodT1nUBA4T70h9szk2pa0EwCmmUNKns-dLOt3YZc/edit#slide=id.g2b3c8d9ca55_0_0)
+
+Demo link (~4 mins): [here](https://youtu.be/70uJhqdWBx8)
+
+_Note: Please go through slides. README not updated!_
+
+
 Rethink your contract logic as a FSM. Modelling contracts as FSMs help identify logical bugs during development and provides a formally sound assurance of the correctness of the contract logic. 
 
 ## Why to write contract as FSMs? 
